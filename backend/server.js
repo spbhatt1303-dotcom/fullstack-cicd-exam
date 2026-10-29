@@ -1,9 +1,13 @@
-#!/bin/bash
-set -e
-export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y docker.io docker-compose-v2
-systemctl enable --now docker
-usermod -aG docker ubuntu
-mkdir -p /home/ubuntu/app
-chown ubuntu:ubuntu /home/ubuntu/app
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const app = express();
+app.use(cors());
+app.use(express.json());
+mongoose.connect(process.env.MONGO_URL)
+ .then(() => console.log("MongoDB Connected"))
+ .catch(err => console.error(err));
+app.get("/api", (req, res) => {
+ res.json({ message: "Backend Running Successfully" });
+});
+app.listen(5000, () => console.log("Listening on 5000"));
